@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FEX Educação — Planejamento Estratégico de Conteúdo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --accent:#32CD32;
+    --accent-soft:#32CD32;
+    --accent-glow:rgba(50,205,50,.35);
+    --accent-deep:#1ea81e;
+    --ink:#EAF4EA;
+    --ink-dim:rgba(234,244,234,.62);
+    --ink-mute:rgba(234,244,234,.38);
+    --bg:#050806;
+    --bg-1:#070b08;
+    --bg-2:#0a130c;
+    --stroke:rgba(50,205,50,.14);
+    --stroke-strong:rgba(50,205,50,.28);
+    --glass:rgba(12,20,14,.55);
+    --glass-hi:rgba(20,32,22,.7);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body{
+    background:
+      radial-gradient(1200px 700px at 80% -10%, rgba(50,205,50,.10), transparent 60%),
+      radial-gradient(900px 600px at -10% 40%, rgba(50,205,50,.07), transparent 55%),
+      radial-gradient(700px 500px at 110% 90%, rgba(50,205,50,.06), transparent 60%),
+      linear-gradient(180deg,#040604 0%,#060a07 100%);
+    min-height:100vh;
+  }
+
+  /* Grid overlay */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;
+    background-image:
+      linear-gradient(rgba(50,205,50,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(50,205,50,.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+  }
+  /* Noise */
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.05;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  /* Floating particles */
+  .particles{position:fixed;inset:0;pointer-events:none;z-index:2}
+  .particles span{
+    position:absolute;width:3px;height:3px;border-radius:50%;
+    background:var(--accent);box-shadow:0 0 12px var(--accent);
+    opacity:.35;animation:drift 18s linear infinite;
+  }
+  @keyframes drift{
+    0%{transform:translateY(110vh) scale(.6);opacity:0}
+    10%{opacity:.6}
+    90%{opacity:.4}
+    100%{transform:translateY(-10vh) scale(1);opacity:0}
+  }
+
+  /* Sidebar nav */
+  .nav{
+    position:fixed;left:24px;top:50%;transform:translateY(-50%);z-index:50;
+    display:flex;flex-direction:column;gap:14px;padding:18px 12px;
+    background:rgba(8,14,10,.55);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+    border:1px solid var(--stroke);border-radius:100px;
+  }
+  .nav a{
+    width:10px;height:10px;border-radius:50%;background:rgba(234,244,234,.18);
+    display:block;transition:all .4s cubic-bezier(.2,.8,.2,1);position:relative;
+  }
+  .nav a:hover{background:var(--accent);box-shadow:0 0 12px var(--accent-glow)}
+  .nav a.active{background:var(--accent);box-shadow:0 0 18px var(--accent);width:10px;height:28px;border-radius:20px}
+  .nav a::after{
+    content:attr(data-label);position:absolute;left:28px;top:50%;transform:translateY(-50%);
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--ink-dim);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .3s;
+  }
+  .nav a:hover::after{opacity:1}
+
+  /* Top chrome */
+  .chrome{
+    position:fixed;top:24px;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;
+    padding:0 40px;pointer-events:none;
+  }
+  .brand{
+    display:flex;align-items:center;gap:12px;pointer-events:auto;
+    padding:10px 16px;border-radius:100px;background:rgba(8,14,10,.55);
+    backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+    border:1px solid var(--stroke);
+  }
+  .brand-mark{
+    width:28px;height:28px;border-radius:8px;
+    background:linear-gradient(135deg,var(--accent),#0d6b0d);
+    box-shadow:0 0 20px var(--accent-glow), inset 0 0 20px rgba(255,255,255,.1);
+    display:grid;place-items:center;
+    font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#042004;
+  }
+  .brand-text{font-family:'Syne',sans-serif;font-weight:600;font-size:13px;letter-spacing:.04em}
+  .brand-text span{color:var(--accent);font-weight:700}
+
+  .chrome-right{display:flex;gap:12px;pointer-events:auto}
+  .tag{
+    padding:8px 14px;border-radius:100px;background:rgba(8,14,10,.55);
+    backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+    border:1px solid var(--stroke);
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-dim);
+  }
+  .tag .pulse{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:8px;box-shadow:0 0 8px var(--accent);animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+  /* Section base */
+  section{
+    position:relative;z-index:3;padding:140px 80px 120px;
+    max-width:1440px;margin:0 auto;
+  }
+
+  /* Utility */
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--accent);display:inline-flex;align-items:center;gap:10px;margin-bottom:24px;
+  }
+  .eyebrow::before{content:"";width:24px;height:1px;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+  h1,h2,h3,h4{font-family:'Syne',sans-serif;letter-spacing:-.02em;line-height:1.05}
+  .display{
+    font-weight:700;font-size:clamp(48px,7.5vw,112px);line-height:.95;letter-spacing:-.035em;
+  }
+  .display .accent{
+    background:linear-gradient(180deg,var(--accent) 0%, #7cf67c 50%, var(--accent) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 30px var(--accent-glow));
+  }
+  .h2{font-size:clamp(36px,4.5vw,64px);font-weight:700;letter-spacing:-.025em}
+  .h3{font-size:clamp(22px,2.2vw,32px);font-weight:600;letter-spacing:-.015em}
+  .lede{font-size:clamp(16px,1.3vw,20px);line-height:1.55;color:var(--ink-dim);max-width:640px}
+
+  /* ============ COVER ============ */
+  #cover{
+    min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+    padding-top:120px;padding-bottom:80px;position:relative;
+  }
+  .cover-spotlight{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:900px;height:900px;pointer-events:none;z-index:-1;
+    background:radial-gradient(circle,rgba(50,205,50,.18) 0%, transparent 60%);
+    filter:blur(40px);animation:breathe 8s ease-in-out infinite;
+  }
+  @keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.1)}}
+  .cover-grid{
+    display:grid;grid-template-columns:1fr auto;gap:80px;align-items:end;
+  }
+  .cover-meta{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:32px;max-width:420px;
+    padding-top:60px;border-top:1px solid var(--stroke);margin-top:60px;
+  }
+  .meta-item .k{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:8px;
+  }
+  .meta-item .v{font-family:'Syne',sans-serif;font-size:20px;font-weight:600;color:var(--ink)}
+  .meta-item .v span{color:var(--accent)}
+
+  .cover-side{
+    display:flex;flex-direction:column;gap:18px;align-items:flex-end;
+  }
+  .big-num{
+    font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(120px,16vw,220px);line-height:.85;
+    background:linear-gradient(180deg,rgba(50,205,50,.9) 0%, rgba(50,205,50,.1) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:-.06em;
+  }
+  .big-num-label{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-dim);text-align:right;max-width:180px;
+  }
+
+  /* ============ CONTEXT ============ */
+  .ctx-grid{
+    display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:start;margin-top:60px;
+  }
+  .ctx-card{
+    background:linear-gradient(180deg,rgba(20,32,22,.5),rgba(8,14,10,.3));
+    border:1px solid var(--stroke);border-radius:24px;padding:40px;position:relative;overflow:hidden;
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  }
+  .ctx-card::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.6;
+  }
+  .ctx-card h3{margin-bottom:16px}
+  .ctx-card p{color:var(--ink-dim);line-height:1.65;font-size:15px}
+  .ctx-stack{display:flex;flex-direction:column;gap:24px}
+  .ctx-mini{
+    display:flex;gap:20px;align-items:flex-start;padding:24px;
+    border:1px solid var(--stroke);border-radius:20px;
+    background:rgba(8,14,10,.4);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  }
+  .ctx-mini .ic{
+    flex-shrink:0;width:44px;height:44px;border-radius:12px;
+    background:linear-gradient(135deg,rgba(50,205,50,.2),rgba(50,205,50,.05));
+    border:1px solid var(--stroke-strong);display:grid;place-items:center;
+    font-family:'Syne',sans-serif;font-weight:700;color:var(--accent);font-size:18px;
+    box-shadow:inset 0 0 20px rgba(50,205,50,.1);
+  }
+  .ctx-mini h4{font-size:16px;margin-bottom:6px;font-weight:600}
+  .ctx-mini p{font-size:13.5px;color:var(--ink-dim);line-height:1.55}
+
+  /* ============ OBJECTIVE ============ */
+  .obj-wrap{
+    margin-top:60px;padding:80px 60px;border-radius:32px;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,rgba(20,32,22,.6),rgba(8,14,10,.4));
+    border:1px solid var(--stroke-strong);
+    backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  }
+  .obj-wrap::after{
+    content:"";position:absolute;bottom:-200px;right:-200px;width:500px;height:500px;border-radius:50%;
+    background:radial-gradient(circle,rgba(50,205,50,.25),transparent 60%);filter:blur(40px);
+  }
+  .obj-quote{
+    font-family:'Syne',sans-serif;font-size:clamp(26px,3vw,44px);font-weight:500;line-height:1.25;letter-spacing:-.02em;
+    max-width:1000px;position:relative;z-index:1;
+  }
+  .obj-quote .h{color:var(--accent);font-weight:700}
+  .obj-stats{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:60px;padding-top:40px;
+    border-top:1px solid var(--stroke);position:relative;z-index:1;
+  }
+  .obj-stats > div{padding:0 24px;border-right:1px solid var(--stroke)}
+  .obj-stats > div:first-child{padding-left:0}
+  .obj-stats > div:last-child{border-right:none;padding-right:0}
+  .obj-stats .n{font-family:'Syne',sans-serif;font-weight:700;font-size:42px;color:var(--accent);letter-spacing:-.02em;margin-bottom:4px}
+  .obj-stats .l{font-size:12px;color:var(--ink-dim);line-height:1.4}
+
+  /* ============ COMMS / STRATEGY BAND ============ */
+  .band{
+    margin-top:60px;padding:60px 48px;border-radius:28px;
+    background:linear-gradient(135deg,rgba(50,205,50,.08),transparent 60%),rgba(8,14,10,.5);
+    border:1px solid var(--stroke);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:center;
+  }
+  .band-flow{
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  }
+  .flow-pill{
+    padding:14px 22px;border-radius:100px;border:1px solid var(--stroke-strong);
+    background:rgba(50,205,50,.06);
+    font-family:'Syne',sans-serif;font-weight:600;font-size:15px;color:var(--ink);
+  }
+  .flow-arrow{color:var(--accent);font-family:'JetBrains Mono',monospace;opacity:.6}
+
+  /* ============ PILLARS ============ */
+  .pillars-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:60px;
+  }
+  .pillar{
+    position:relative;padding:36px 28px;border-radius:24px;
+    background:linear-gradient(180deg,rgba(20,32,22,.55),rgba(8,14,10,.35));
+    border:1px solid var(--stroke);overflow:hidden;
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    transition:transform .5s cubic-bezier(.2,.8,.2,1),border-color .4s;
+    min-height:280px;display:flex;flex-direction:column;justify-content:space-between;
+  }
+  .pillar:hover{transform:translateY(-6px);border-color:var(--stroke-strong)}
+  .pillar::before{
+    content:"";position:absolute;top:0;left:0;width:40%;height:2px;
+    background:linear-gradient(90deg,var(--accent),transparent);box-shadow:0 0 12px var(--accent);
+  }
+  .pillar .num{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--accent);opacity:.8;
+  }
+  .pillar h4{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin:20px 0 10px;letter-spacing:-.015em;line-height:1.1}
+  .pillar p{font-size:13.5px;color:var(--ink-dim);line-height:1.6}
+  .pillar .pct{
+    margin-top:24px;display:flex;align-items:center;gap:10px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-mute);letter-spacing:.1em;
+  }
+  .pillar .bar{flex:1;height:2px;background:rgba(50,205,50,.12);border-radius:2px;overflow:hidden}
+  .pillar .bar i{display:block;height:100%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+
+  /* ============ MONTHLY ARC ============ */
+  .arc{
+    margin-top:60px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+  }
+  .arc-card{
+    position:relative;padding:48px 36px;border-radius:28px;overflow:hidden;
+    background:linear-gradient(180deg,rgba(20,32,22,.55),rgba(8,14,10,.3));
+    border:1px solid var(--stroke);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    min-height:360px;display:flex;flex-direction:column;justify-content:space-between;
+  }
+  .arc-card .phase{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.24em;color:var(--ink-mute);text-transform:uppercase;
+  }
+  .arc-card .m{
+    font-family:'Syne',sans-serif;font-weight:800;font-size:96px;line-height:.85;letter-spacing:-.04em;
+    background:linear-gradient(180deg,var(--ink),rgba(234,244,234,.25));
+    -webkit-background-clip:text;background-clip:text;color:transparent;margin-top:16px;
+  }
+  .arc-card .title{font-family:'Syne',sans-serif;font-weight:700;font-size:28px;color:var(--accent);margin-top:18px;letter-spacing:-.02em}
+  .arc-card .desc{font-size:14px;color:var(--ink-dim);line-height:1.6;margin-top:14px}
+  .arc-card .weeks{
+    margin-top:24px;padding-top:20px;border-top:1px solid var(--stroke);
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--ink-mute);text-transform:uppercase;
+  }
+  .arc-card::after{
+    content:attr(data-m);position:absolute;bottom:-40px;right:-20px;
+    font-family:'Syne',sans-serif;font-weight:800;font-size:220px;color:var(--accent);opacity:.04;letter-spacing:-.06em;line-height:1;
+  }
+
+  /* ============ WEEKS ============ */
+  .weeks-head{
+    display:flex;justify-content:space-between;align-items:flex-end;margin-top:60px;margin-bottom:40px;gap:40px;flex-wrap:wrap;
+  }
+  .legend{display:flex;gap:20px;flex-wrap:wrap}
+  .lg{
+    display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:100px;
+    border:1px solid var(--stroke);background:rgba(8,14,10,.5);
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--ink-dim);text-transform:uppercase;
+  }
+  .lg .dot{width:8px;height:8px;border-radius:2px}
+  .lg.reel .dot{background:var(--accent);box-shadow:0 0 8px var(--accent);border-radius:50%}
+  .lg.car .dot{background:transparent;border:1.5px solid var(--accent)}
+
+  .week{
+    position:relative;padding:40px 36px 36px;border-radius:28px;margin-bottom:20px;
+    background:linear-gradient(180deg,rgba(14,22,16,.6),rgba(8,14,10,.35));
+    border:1px solid var(--stroke);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    transition:border-color .4s;
+  }
+  .week:hover{border-color:var(--stroke-strong)}
+  .week-head{
+    display:grid;grid-template-columns:auto 1fr auto;gap:32px;align-items:center;margin-bottom:28px;
+    padding-bottom:24px;border-bottom:1px dashed var(--stroke);
+  }
+  .week-num{
+    font-family:'Syne',sans-serif;font-weight:800;font-size:64px;line-height:.85;letter-spacing:-.04em;color:var(--accent);
+    filter:drop-shadow(0 0 18px var(--accent-glow));
+  }
+  .week-num small{
+    display:block;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--ink-mute);font-weight:400;margin-top:6px;
+  }
+  .week-theme h3{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+  .week-theme p{font-size:14px;color:var(--ink-dim);line-height:1.5;max-width:520px}
+  .week-tag{
+    padding:10px 16px;border-radius:100px;background:rgba(50,205,50,.08);border:1px solid var(--stroke-strong);
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--accent);text-transform:uppercase;
+  }
+
+  .posts{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  @media(max-width:1100px){.posts{grid-template-columns:repeat(2,1fr)}}
+  .post{
+    position:relative;padding:24px 22px;border-radius:18px;overflow:hidden;
+    background:rgba(10,18,12,.6);border:1px solid var(--stroke);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    display:flex;flex-direction:column;gap:12px;min-height:280px;
+    transition:all .4s cubic-bezier(.2,.8,.2,1);
+  }
+  .post:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:0 12px 40px rgba(50,205,50,.08)}
+  .post::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--accent),transparent);
+  }
+  .post .type{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+  }
+  .post .type .ic{width:8px;height:8px;background:var(--accent);border-radius:2px;box-shadow:0 0 8px var(--accent)}
+  .post.carrossel .type .ic{border-radius:2px;background:transparent;border:1.5px solid var(--accent);box-shadow:none}
+  .post.reel .type .ic{border-radius:50%}
+  .post .pilar{
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.18em;color:var(--ink-mute);text-transform:uppercase;
+  }
+  .post h5{font-family:'Syne',sans-serif;font-size:17px;font-weight:600;line-height:1.25;letter-spacing:-.01em;color:var(--ink)}
+  .post .obj{font-size:12.5px;color:var(--ink-dim);line-height:1.5}
+  .post .script{
+    margin-top:auto;padding-top:14px;border-top:1px dashed rgba(50,205,50,.15);
+    font-size:12px;color:var(--ink-dim);line-height:1.55;font-style:italic;
+  }
+  .post .script b{color:var(--accent);font-style:normal;font-weight:500;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.14em;display:block;margin-bottom:6px;text-transform:uppercase}
+
+  /* ============ EXAMPLES / FEATURED ============ */
+  .feat-grid{
+    display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:20px;margin-top:60px;
+  }
+  .feat{
+    position:relative;padding:40px 36px;border-radius:28px;overflow:hidden;
+    background:linear-gradient(180deg,rgba(20,32,22,.55),rgba(8,14,10,.3));
+    border:1px solid var(--stroke-strong);
+    backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+    min-height:460px;display:flex;flex-direction:column;
+  }
+  .feat .label{
+    display:inline-flex;align-items:center;gap:10px;padding:6px 12px;border-radius:100px;
+    background:rgba(50,205,50,.1);border:1px solid var(--stroke-strong);
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);
+    align-self:flex-start;margin-bottom:20px;
+  }
+  .feat h4{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;line-height:1.15;letter-spacing:-.02em;margin-bottom:16px}
+  .feat .intro{font-size:14px;color:var(--ink-dim);line-height:1.55;margin-bottom:24px}
+  .slides{display:flex;flex-direction:column;gap:10px;margin-top:auto}
+  .slide-item{
+    display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:flex-start;
+    padding:12px 14px;background:rgba(10,18,12,.5);border:1px solid var(--stroke);border-radius:12px;
+  }
+  .slide-item .n{
+    width:24px;height:24px;border-radius:6px;background:rgba(50,205,50,.12);border:1px solid var(--stroke-strong);
+    display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);font-weight:600;
+  }
+  .slide-item .txt{font-size:13px;color:var(--ink);line-height:1.45}
+  .feat.reel-feat .big{
+    font-family:'Syne',sans-serif;font-size:26px;font-weight:500;line-height:1.3;letter-spacing:-.015em;color:var(--ink);
+    padding:24px 20px;background:rgba(10,18,12,.5);border:1px solid var(--stroke);border-radius:14px;position:relative;
+  }
+  .feat.reel-feat .big::before{
+    content:"“";position:absolute;top:-20px;left:12px;font-family:'Syne',sans-serif;font-size:80px;color:var(--accent);line-height:1;opacity:.4;
+  }
+
+  /* ============ VISUAL DIRECTION ============ */
+  .vdir{
+    margin-top:60px;display:grid;grid-template-columns:1fr 1fr;gap:40px;
+  }
+  .vdir-left{
+    padding:48px;border-radius:28px;position:relative;overflow:hidden;
+    background:
+      radial-gradient(circle at 30% 20%,rgba(50,205,50,.2),transparent 50%),
+      linear-gradient(135deg,rgba(20,32,22,.7),rgba(8,14,10,.4));
+    border:1px solid var(--stroke-strong);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    min-height:500px;
+  }
+  .vdir-chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+  .chip{
+    padding:10px 16px;border-radius:100px;background:rgba(8,14,10,.6);border:1px solid var(--stroke);
+    font-size:12.5px;color:var(--ink-dim);
+  }
+  .palette{display:flex;gap:12px;margin-top:32px}
+  .swatch{
+    flex:1;aspect-ratio:1/1;border-radius:16px;position:relative;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:flex-end;padding:14px;
+    border:1px solid var(--stroke);
+  }
+  .swatch .v{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,.8)}
+  .swatch .n{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:#fff;margin-top:4px}
+  .s-1{background:linear-gradient(135deg,#32CD32,#1ea81e)}
+  .s-2{background:linear-gradient(135deg,#0a130c,#050806)}
+  .s-3{background:linear-gradient(135deg,#12221a,#0a130c)}
+  .s-4{background:linear-gradient(135deg,#EAF4EA,#a8c0a8)}
+  .s-4 .v,.s-4 .n{color:#0a130c}
+
+  .vdir-right{display:flex;flex-direction:column;gap:20px}
+  .vd-item{
+    padding:28px;border-radius:20px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;
+    background:rgba(10,18,12,.55);border:1px solid var(--stroke);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  }
+  .vd-item .sq{
+    width:60px;height:60px;border-radius:14px;flex-shrink:0;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,rgba(50,205,50,.15),rgba(50,205,50,.03));
+    border:1px solid var(--stroke-strong);
+  }
+  .vd-item .sq::after{
+    content:"";position:absolute;inset:8px;border-radius:8px;border:1.5px solid var(--accent);opacity:.6;
+  }
+  .vd-item h5{font-family:'Syne',sans-serif;font-size:17px;font-weight:600;letter-spacing:-.01em;margin-bottom:4px}
+  .vd-item p{font-size:13px;color:var(--ink-dim);line-height:1.55}
+
+  /* ============ CREATIVE IDEAS ============ */
+  .ideas{
+    margin-top:60px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  }
+  .idea{
+    position:relative;padding:32px 24px;border-radius:20px;min-height:200px;
+    background:rgba(10,18,12,.55);border:1px solid var(--stroke);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    display:flex;flex-direction:column;justify-content:space-between;
+    transition:all .4s;
+  }
+  .idea:hover{border-color:var(--accent);transform:translateY(-4px)}
+  .idea .hash{
+    font-family:'Syne',sans-serif;font-weight:800;font-size:48px;color:var(--accent);line-height:1;opacity:.5;letter-spacing:-.03em;
+  }
+  .idea h5{font-family:'Syne',sans-serif;font-size:18px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px;line-height:1.2}
+  .idea p{font-size:12.5px;color:var(--ink-dim);line-height:1.55}
+
+  /* ============ CTA FINAL ============ */
+  #close{padding-bottom:180px}
+  .cta{
+    margin-top:60px;padding:100px 80px;border-radius:40px;position:relative;overflow:hidden;text-align:center;
+    background:
+      radial-gradient(circle at 50% 0%,rgba(50,205,50,.25),transparent 60%),
+      linear-gradient(180deg,rgba(20,32,22,.7),rgba(8,14,10,.5));
+    border:1px solid var(--stroke-strong);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  }
+  .cta::before{
+    content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:400px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--accent),transparent);box-shadow:0 0 20px var(--accent);
+  }
+  .cta::after{
+    content:"FEX";position:absolute;bottom:-80px;left:50%;transform:translateX(-50%);
+    font-family:'Syne',sans-serif;font-weight:800;font-size:400px;color:var(--accent);opacity:.03;line-height:.8;letter-spacing:-.08em;pointer-events:none;
+  }
+  .cta h2{
+    font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(36px,5vw,72px);line-height:1.05;letter-spacing:-.03em;max-width:900px;margin:0 auto 24px;
+  }
+  .cta h2 em{font-style:normal;color:var(--accent);filter:drop-shadow(0 0 20px var(--accent-glow))}
+  .cta p{font-size:17px;color:var(--ink-dim);max-width:620px;margin:0 auto 40px;line-height:1.55}
+  .cta-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{
+    padding:18px 36px;border-radius:100px;font-family:'Syne',sans-serif;font-weight:600;font-size:15px;letter-spacing:-.005em;
+    cursor:pointer;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:10px;
+  }
+  .btn-primary{
+    background:var(--accent);color:#042004;border:1px solid var(--accent);
+    box-shadow:0 0 30px var(--accent-glow);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 40px var(--accent-glow)}
+  .btn-ghost{background:rgba(10,18,12,.5);color:var(--ink);border:1px solid var(--stroke-strong)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+  .footer{
+    text-align:center;margin-top:80px;padding-top:40px;border-top:1px solid var(--stroke);
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;color:var(--ink-mute);text-transform:uppercase;
+  }
+  .footer span{color:var(--accent)}
+
+  /* ========= Section header block ========= */
+  .sec-head{margin-bottom:10px;max-width:900px}
+  .sec-head .idx{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.24em;color:var(--ink-mute);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:12px;
+  }
+  .sec-head .idx b{color:var(--accent);font-weight:400}
+  .sec-head .idx .line{flex:1;height:1px;background:linear-gradient(90deg,var(--stroke),transparent);max-width:200px}
+
+  /* Responsive */
+  @media(max-width:1200px){
+    section{padding:120px 48px 100px}
+    .ctx-grid,.band,.vdir{grid-template-columns:1fr}
+    .pillars-grid,.ideas{grid-template-columns:repeat(2,1fr)}
+    .arc,.feat-grid{grid-template-columns:1fr}
+    .obj-stats{grid-template-columns:repeat(2,1fr);gap:24px}
+    .obj-stats > div{border-right:none;border-bottom:1px solid var(--stroke);padding:0 0 20px}
+  }
+  @media(max-width:768px){
+    section{padding:100px 24px 80px}
+    .chrome{padding:0 16px}
+    .nav{left:12px;padding:14px 10px}
+    .cover-grid{grid-template-columns:1fr}
+    .cover-side{align-items:flex-start}
+    .cover-meta{grid-template-columns:1fr}
+    .pillars-grid,.ideas{grid-template-columns:1fr}
+    .week-head{grid-template-columns:1fr;gap:16px}
+    .band{padding:40px 24px}
+    .obj-wrap{padding:48px 28px}
+    .cta{padding:60px 28px}
+  }
+
+  /* Reveal animations */
+  .reveal{opacity:0;transform:translateY(30px);transition:all .9s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- Particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Top chrome -->
+<div class="chrome">
+  <div class="brand">
+    <div class="brand-mark">F</div>
+    <div class="brand-text">FEX <span>EDUCAÇÃO</span></div>
+  </div>
+  <div class="chrome-right">
+    <div class="tag"><span class="pulse"></span>STRATEGY DECK · 2026</div>
+    <div class="tag">12 SEMANAS / 48 POSTS</div>
+  </div>
+</div>
+
+<!-- Side nav -->
+<nav class="nav">
+  <a href="#cover" data-label="Capa" class="active"></a>
+  <a href="#context" data-label="Contexto"></a>
+  <a href="#objective" data-label="Objetivo"></a>
+  <a href="#strategy" data-label="Estratégia"></a>
+  <a href="#pillars" data-label="Pilares"></a>
+  <a href="#arc" data-label="Meses"></a>
+  <a href="#weeks" data-label="Semanas"></a>
+  <a href="#examples" data-label="Exemplos"></a>
+  <a href="#visual" data-label="Visual"></a>
+  <a href="#ideas" data-label="Criativos"></a>
+  <a href="#close" data-label="Ação"></a>
+</nav>
+
+<!-- ===== 01 · COVER ===== -->
+<section id="cover">
+  <div class="cover-spotlight"></div>
+  <div class="cover-grid">
+    <div>
+      <div class="eyebrow">01 · Planejamento Estratégico</div>
+      <h1 class="display reveal">
+        Planejamento<br>
+        de Conteúdo<br>
+        <span class="accent">FEX Educação</span>
+      </h1>
+      <p class="lede reveal" style="margin-top:36px">
+        Uma estratégia de três meses para posicionar a FEX como referência em estruturação de produtos educacionais, elevar a percepção de valor da marca e gerar parceiros qualificados através de conteúdo simples, direto e estratégico.
+      </p>
+      <div class="cover-meta reveal">
+        <div class="meta-item">
+          <div class="k">Duração</div>
+          <div class="v"><span>90</span> dias</div>
+        </div>
+        <div class="meta-item">
+          <div class="k">Frequência</div>
+          <div class="v"><span>4</span> posts/semana</div>
+        </div>
+        <div class="meta-item">
+          <div class="k">Canal</div>
+          <div class="v">Instagram</div>
+        </div>
+        <div class="meta-item">
+          <div class="k">Formato</div>
+          <div class="v"><span>2</span>C + <span>2</span>R</div>
+        </div>
+      </div>
+    </div>
+    <div class="cover-side reveal">
+      <div class="big-num">48</div>
+      <div class="big-num-label">Peças de conteúdo estrategicamente sequenciadas para conversão</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 02 · CONTEXT ===== -->
+<section id="context">
+  <div class="sec-head reveal">
+    <div class="idx"><b>02</b><span>Contexto</span><span class="line"></span></div>
+    <h2 class="h2">O momento da marca é de <span style="color:var(--accent)">consolidação estratégica</span>.</h2>
+  </div>
+  <div class="ctx-grid">
+    <div class="ctx-card reveal">
+      <h3 class="h3">Por que esse planejamento existe.</h3>
+      <p>A FEX Educação construiu autoridade técnica, infraestrutura acadêmica e um ecossistema robusto de produtos. O que está em aberto é a <b style="color:var(--ink)">tradução dessa densidade</b> para uma linguagem pública, simples e escalável. Este planejamento existe para fechar essa distância — entre o que a FEX entrega e o que o mercado compreende.</p>
+    </div>
+    <div class="ctx-stack">
+      <div class="ctx-mini reveal"><div class="ic">01</div><div><h4>Autoridade já construída</h4><p>A FEX tem profundidade técnica, chancela MEC e histórico de transformações reais. Falta narrativa pública à altura.</p></div></div>
+      <div class="ctx-mini reveal"><div class="ic">02</div><div><h4>Oportunidade de mercado</h4><p>Especialistas, mentores e donos de conhecimento buscam estrutura para escalar. Poucos entendem o que isso significa na prática.</p></div></div>
+      <div class="ctx-mini reveal"><div class="ic">03</div><div><h4>Gap de comunicação</h4><p>O ecossistema é complexo. A comunicação precisa ser simples o suficiente para virar decisão.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 03 · OBJECTIVE ===== -->
+<section id="objective">
+  <div class="sec-head reveal">
+    <div class="idx"><b>03</b><span>Objetivo</span><span class="line"></span></div>
+    <h2 class="h2">Um objetivo, três consequências.</h2>
+  </div>
+  <div class="obj-wrap reveal">
+    <p class="obj-quote">
+      Posicionar a FEX Educação como <span class="h">referência em estruturação de produtos educacionais</span>, aumentar a percepção de valor de seus serviços e gerar mais parceiros qualificados — através de conteúdo simples, direto e estratégico.
+    </p>
+    <div class="obj-stats">
+      <div>
+        <div class="n">→</div>
+        <div class="l" style="margin-top:8px">Posicionamento claro e memorável no feed de quem decide</div>
+      </div>
+      <div>
+        <div class="n">↑</div>
+        <div class="l" style="margin-top:8px">Percepção de valor elevada por densidade estratégica</div>
+      </div>
+      <div>
+        <div class="n">∞</div>
+        <div class="l" style="margin-top:8px">Crescimento orgânico por conteúdo compartilhável</div>
+      </div>
+      <div>
+        <div class="n">◉</div>
+        <div class="l" style="margin-top:8px">Parceiros qualificados chegando aquecidos ao diagnóstico</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 04 · COMMUNICATION STRATEGY ===== -->
+<section id="strategy">
+  <div class="sec-head reveal">
+    <div class="idx"><b>04</b><span>Estratégia de Comunicação</span><span class="line"></span></div>
+    <h2 class="h2">Complexo por dentro.<br><span style="color:var(--accent)">Simples por fora.</span></h2>
+  </div>
+  <div class="band reveal">
+    <div>
+      <h3 class="h3" style="margin-bottom:14px">A lógica da comunicação.</h3>
+      <p style="color:var(--ink-dim);line-height:1.7;font-size:15px">
+        Toda peça será construída como se estivéssemos explicando um conceito denso para alguém que ainda não conhece a FEX. Linguagem direta, cadência didática, progressão clara. Se o mercado não entende em cinco segundos, o conteúdo falhou.
+      </p>
+    </div>
+    <div>
+      <div class="eyebrow">Jornada do entendimento</div>
+      <div class="band-flow">
+        <div class="flow-pill">Entendimento</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-pill">Valor</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-pill">Desejo</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-pill" style="background:var(--accent);color:#042004;border-color:var(--accent);box-shadow:0 0 20px var(--accent-glow)">Ação</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 05 · PILLARS ===== -->
+<section id="pillars">
+  <div class="sec-head reveal">
+    <div class="idx"><b>05</b><span>Pilares de Conteúdo</span><span class="line"></span></div>
+    <h2 class="h2">Quatro pilares.<br>Uma narrativa única.</h2>
+    <p class="lede" style="margin-top:20px">Cada post é encaixado em um dos quatro pilares. A distribuição semanal garante equilíbrio entre ensinar, engajar, provar e converter.</p>
+  </div>
+  <div class="pillars-grid">
+    <div class="pillar reveal">
+      <div>
+        <div class="num">P · 01</div>
+        <h4>Informativo<br>& Explicativo</h4>
+        <p>Conteúdo que ensina, destrincha e explica os produtos e o ecossistema da FEX de forma didática.</p>
+      </div>
+      <div class="pct"><span>PESO</span><div class="bar"><i style="width:30%"></i></div><span>30%</span></div>
+    </div>
+    <div class="pillar reveal">
+      <div>
+        <div class="num">P · 02</div>
+        <h4>Engajamento<br>& Repertório</h4>
+        <p>Conteúdo que gera conversa, identificação e compartilhamento. Aumenta alcance e conexão.</p>
+      </div>
+      <div class="pct"><span>PESO</span><div class="bar"><i style="width:25%"></i></div><span>25%</span></div>
+    </div>
+    <div class="pillar reveal">
+      <div>
+        <div class="num">P · 03</div>
+        <h4>Estudo de Caso<br>& Prova</h4>
+        <p>Resultados, bastidores e transformações. É o que sustenta a autoridade e ancora a decisão.</p>
+      </div>
+      <div class="pct"><span>PESO</span><div class="bar"><i style="width:25%"></i></div><span>25%</span></div>
+    </div>
+    <div class="pillar reveal">
+      <div>
+        <div class="num">P · 04</div>
+        <h4>CTA<br>& Conversão</h4>
+        <p>Conteúdo com direcionamento claro para ação. Transforma audiência em leads qualificados.</p>
+      </div>
+      <div class="pct"><span>PESO</span><div class="bar"><i style="width:20%"></i></div><span>20%</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 06 · MONTHLY ARC ===== -->
+<section id="arc">
+  <div class="sec-head reveal">
+    <div class="idx"><b>06</b><span>Arco Mensal</span><span class="line"></span></div>
+    <h2 class="h2">Três meses.<br>Três movimentos.</h2>
+    <p class="lede" style="margin-top:20px">A estratégia se revela em três atos. Cada mês amplifica o anterior e prepara o próximo.</p>
+  </div>
+  <div class="arc">
+    <div class="arc-card reveal" data-m="01">
+      <div>
+        <div class="phase">ATO I</div>
+        <div class="m">01</div>
+        <div class="title">Clareza</div>
+        <p class="desc">Mês de educar o mercado sobre o que a FEX realmente faz. Derrubar mitos, ampliar compreensão, plantar a semente de valor. O objetivo é fazer qualquer pessoa entender o modelo em segundos.</p>
+      </div>
+      <div class="weeks">Semanas 01 — 04</div>
+    </div>
+    <div class="arc-card reveal" data-m="02">
+      <div>
+        <div class="phase">ATO II</div>
+        <div class="m">02</div>
+        <div class="title">Valor</div>
+        <p class="desc">Aprofundamento em cada produto do ecossistema — Extensão, Pós, Chancela, Universidade Corporativa. Aqui a autoridade deixa de ser abstrata e vira prova concreta de resultado.</p>
+      </div>
+      <div class="weeks">Semanas 05 — 08</div>
+    </div>
+    <div class="arc-card reveal" data-m="03">
+      <div>
+        <div class="phase">ATO III</div>
+        <div class="m">03</div>
+        <div class="title">Conversão</div>
+        <p class="desc">Estratégia, lucro oculto, esteira, transformação. O conteúdo traciona decisão. O mês se fecha com um convite direto — e quem acompanhou desde o início já está pronto para agir.</p>
+      </div>
+      <div class="weeks">Semanas 09 — 12</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 07 · WEEKS ===== -->
+<section id="weeks">
+  <div class="sec-head reveal">
+    <div class="idx"><b>07</b><span>Planejamento Semanal</span><span class="line"></span></div>
+    <h2 class="h2">Doze semanas.<br><span style="color:var(--accent)">Quarenta e oito peças.</span></h2>
+  </div>
+  <div class="weeks-head">
+    <p class="lede">Cada semana entrega 2 carrosséis e 2 reels, sequenciados para gerar progressão narrativa e pico de conversão nos pontos certos.</p>
+    <div class="legend">
+      <div class="lg car"><span class="dot"></span>Carrossel</div>
+      <div class="lg reel"><span class="dot"></span>Reel</div>
+    </div>
+  </div>
+
+  <!-- WEEK 1 -->
+  <div class="week reveal">
+    <div class="week-head">
+      <div class="week-num">01<small>Semana 01 · Mês 01</small></div>
+      <div class="week-theme">
+        <h3>Apresentação institucional</h3>
+        <p>Quebrar a percepção de que a FEX é apenas uma faculdade e instalar a ideia de estrutura de crescimento.</p>
+      </div>
+      <div class="week-tag">Ato I · Clareza</div>
+    </div>
+    <div class="posts">
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Informativo</div>
+        <h5>O que é a FEX Educação de verdade</h5>
+        <div class="obj">Quebrar a leitura reducionista de "faculdade" e instalar a ideia de estrutura.</div>
+        <div class="script"><b>Roteiro</b>S1: Você realmente entende o que a FEX faz? → S2: A maioria acha que é só uma faculdade → S3: Na prática, é uma estrutura de crescimento → S4: Transformamos conhecimento em produto → S5: Produto em posicionamento → S6: Posicionamento em resultado → S7: A FEX não é sobre estudar → Slide final: É sobre crescer com estrutura.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · Engajamento</div>
+        <h5>Você já pode estar pronto pra isso</h5>
+        <div class="obj">Abrir a chave de que a audiência já tem o ativo — falta estrutura.</div>
+        <div class="script"><b>Roteiro</b>"Se você já ensina, já vende ou já ajuda pessoas… você pode estar muito mais perto de construir algo grande do que imagina. A diferença entre quem cresce e quem estagna não é o conhecimento. É a estrutura."</div>
+      </div>
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Prova</div>
+        <h5>Antes vs Depois: o que muda com estrutura</h5>
+        <div class="obj">Visualizar a transformação concreta que a FEX gera.</div>
+        <div class="script"><b>Roteiro</b>Antes: curso solto → Depois: produto estruturado. Antes: venda pontual → Depois: crescimento contínuo. Antes: autoridade dispersa → Depois: posicionamento claro. Fechamento: Estrutura muda tudo.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · CTA</div>
+        <h5>Qual o próximo passo?</h5>
+        <div class="obj">Introduzir a ideia de diagnóstico sem empurrar venda.</div>
+        <div class="script"><b>Roteiro</b>"Seu conhecimento pode virar algo muito maior. A pergunta não é se isso é possível. É: você sabe qual o próximo passo? A gente sabe. → Link na bio."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 2 -->
+  <div class="week reveal">
+    <div class="week-head">
+      <div class="week-num">02<small>Semana 02 · Mês 01</small></div>
+      <div class="week-theme">
+        <h3>Parceria e ecossistema</h3>
+        <p>Explicar o que significa ser parceiro FEX — não cliente de curso, não aluno. Parceiro estratégico.</p>
+      </div>
+      <div class="week-tag">Ato I · Clareza</div>
+    </div>
+    <div class="posts">
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Informativo</div>
+        <h5>O que é ser parceiro FEX</h5>
+        <div class="obj">Redefinir a relação FEX × audiência: parceria, não consumo.</div>
+        <div class="script"><b>Roteiro</b>Ser parceiro FEX não é cursar. É construir. → Entrada no ecossistema completo → Acesso a estrutura, chancela e suporte → Crescimento com acompanhamento estratégico → Não é produto. É sistema. → Fechamento: Parceria muda o jogo.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · Engajamento</div>
+        <h5>O erro que trava quem tenta crescer sozinho</h5>
+        <div class="obj">Identificação imediata com quem tentou escalar sem estrutura.</div>
+        <div class="script"><b>Roteiro</b>"Quem tenta crescer sozinho sempre trava no mesmo ponto. Não é falta de conhecimento. É falta de estrutura que transforma conhecimento em sistema."</div>
+      </div>
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Prova</div>
+        <h5>Evolução real de um produto educacional</h5>
+        <div class="obj">Mostrar o antes/depois prático de um produto que passou pela FEX.</div>
+        <div class="script"><b>Roteiro</b>Mês 0: ideia dispersa → Mês 1: estruturação e posicionamento → Mês 2: entrada no ecossistema → Mês 3: primeiras turmas → Mês 6: recorrência. A estrutura não dobra o esforço. Ela divide o tempo.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · CTA</div>
+        <h5>Existe um próximo nível pro que você já faz</h5>
+        <div class="obj">Ativar desejo de evolução sem forçar urgência.</div>
+        <div class="script"><b>Roteiro</b>"Existe um próximo nível pro que você já faz. E ele não é mais um curso. É uma estrutura. → Link na bio: diagnóstico gratuito."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 3 -->
+  <div class="week reveal">
+    <div class="week-head">
+      <div class="week-num">03<small>Semana 03 · Mês 01</small></div>
+      <div class="week-theme">
+        <h3>Conteúdo · Produto · Negócio</h3>
+        <p>Desambiguar três conceitos que a maioria confunde — e que explicam por que tanta gente estaciona.</p>
+      </div>
+      <div class="week-tag">Ato I · Clareza</div>
+    </div>
+    <div class="posts">
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Informativo</div>
+        <h5>Conteúdo vs Produto vs Negócio</h5>
+        <div class="obj">Criar clareza conceitual que separa FEX de influenciadores.</div>
+        <div class="script"><b>Roteiro</b>Conteúdo informa → Produto entrega resultado → Negócio escala. A maioria para no primeiro. Alguns chegam no segundo. Poucos constroem o terceiro. A FEX é sobre o terceiro.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · Engajamento</div>
+        <h5>Saber não é suficiente</h5>
+        <div class="obj">Provocar quem acumula conhecimento sem transformar em negócio.</div>
+        <div class="script"><b>Roteiro</b>"Saber não é suficiente. Ensinar também não é. O que transforma conhecimento em negócio é estrutura — e é isso que a maioria pula."</div>
+      </div>
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Prova</div>
+        <h5>Organização gera escala</h5>
+        <div class="obj">Provar que estrutura não é burocracia, é alavanca.</div>
+        <div class="script"><b>Roteiro</b>Sem estrutura: tudo depende de você → Com estrutura: o sistema trabalha por você. Organização não é travamento. É alavanca. Quem entende isso cresce. Quem não entende, empaca.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · CTA</div>
+        <h5>Você está no conteúdo ou no negócio?</h5>
+        <div class="obj">Autodiagnóstico rápido que puxa pro diagnóstico formal.</div>
+        <div class="script"><b>Roteiro</b>"Pergunta honesta: você está no conteúdo ou no negócio? Se não souber responder, a gente ajuda a descobrir. → Link na bio."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 4 -->
+  <div class="week reveal">
+    <div class="week-head">
+      <div class="week-num">04<small>Semana 04 · Mês 01</small></div>
+      <div class="week-theme">
+        <h3>O ecossistema por dentro</h3>
+        <p>Primeira apresentação panorâmica do ecossistema FEX — com a lente de que o mercado mudou.</p>
+      </div>
+      <div class="week-tag">Ato I · Clareza</div>
+    </div>
+    <div class="posts">
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Informativo</div>
+        <h5>Como funciona o ecossistema FEX</h5>
+        <div class="obj">Visão panorâmica: ecossistema não é lista de produtos, é arquitetura.</div>
+        <div class="script"><b>Roteiro</b>Extensão: entrada no mercado → Pós-graduação: posicionamento e chancela → Universidade Corporativa: escala B2B → Mentorias: transformação estratégica → Esteira: crescimento contínuo. Cada peça conecta na próxima.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · Engajamento</div>
+        <h5>O mercado mudou. Você mudou junto?</h5>
+        <div class="obj">Instalar urgência de adaptação sem tom alarmista.</div>
+        <div class="script"><b>Roteiro</b>"O mercado educacional mudou. Não é mais sobre ter um curso. É sobre ter um sistema. E quem não percebe isso vai ficar fora — não por falta de mérito, mas por falta de estrutura."</div>
+      </div>
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Prova</div>
+        <div class="pilar">Pilar · Prova</div>
+        <h5>Produto simples pode crescer grande</h5>
+        <div class="obj">Desmistificar que escala exige complexidade.</div>
+        <div class="script"><b>Roteiro</b>Um produto bem estruturado bate dez produtos soltos. Simplicidade com arquitetura escala. Complexidade sem estrutura trava. A FEX é sobre descomplicar para escalar.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · CTA</div>
+        <h5>Qual é a sua entrada no ecossistema?</h5>
+        <div class="obj">Direcionar leads para diferentes pontos de entrada FEX.</div>
+        <div class="script"><b>Roteiro</b>"Extensão, pós, universidade corporativa, mentoria. Cada perfil tem uma porta. A pergunta é: qual é a sua? → Diagnóstico gratuito no link da bio."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 5 -->
+  <div class="week reveal">
+    <div class="week-head">
+      <div class="week-num">05<small>Semana 05 · Mês 02</small></div>
+      <div class="week-theme">
+        <h3>Extensão: a porta de entrada</h3>
+        <p>Explicar o produto Extensão como primeiro passo no ecossistema — baixa fricção, alta transformação.</p>
+      </div>
+      <div class="week-tag">Ato II · Valor</div>
+    </div>
+    <div class="posts">
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Informativo</div>
+        <h5>Extensão universitária: por onde começa</h5>
+        <div class="obj">Explicar o que é extensão, para quem serve e o que entrega.</div>
+        <div class="script"><b>Roteiro</b>O que é → Pra quem serve → Diferença de curso livre → O que a chancela MEC adiciona → Casos reais → CTA para diagnóstico.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · Engajamento</div>
+        <h5>Seu curso tem chancela ou tem só PDF?</h5>
+        <div class="obj">Provocação que separa produto amador de produto institucional.</div>
+        <div class="script"><b>Roteiro</b>"Tem uma diferença entre vender curso e entregar formação. E essa diferença se chama chancela. Sem ela, você está no PDF. Com ela, você está no mercado."</div>
+      </div>
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Prova</div>
+        <h5>Do curso solto ao produto chancelado</h5>
+        <div class="obj">Mostrar a jornada real de um especialista que virou extensão.</div>
+        <div class="script"><b>Roteiro</b>Semana 1: ideia dispersa → Estruturação com FEX → Chancela e posicionamento → Primeira turma com autoridade triplicada. Chancela não é selo. É narrativa.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · CTA</div>
+        <h5>Comece pela extensão</h5>
+        <div class="obj">CTA objetivo para quem está no perfil de entrada.</div>
+        <div class="script"><b>Roteiro</b>"Se você ainda não tem produto estruturado, não precisa começar grande. Precisa começar certo. Extensão é a porta. → Link na bio."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 6 -->
+  <div class="week reveal">
+    <div class="week-head">
+      <div class="week-num">06<small>Semana 06 · Mês 02</small></div>
+      <div class="week-theme">
+        <h3>Pós-graduação: posicionamento e valor</h3>
+        <p>Entrar na conversa de ticket alto, especialização e percepção de valor elevada.</p>
+      </div>
+      <div class="week-tag">Ato II · Valor</div>
+    </div>
+    <div class="posts">
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Informativo</div>
+        <h5>Por que pós-graduação muda o jogo</h5>
+        <div class="obj">Explicar o salto de posicionamento que a pós gera.</div>
+        <div class="script"><b>Roteiro</b>Pós não é só conteúdo. É posicionamento → Eleva ticket → Eleva autoridade → Eleva percepção de mercado → Caso real → Fechamento: pós é status que vira venda.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · Engajamento</div>
+        <h5>A diferença entre especialista e autoridade</h5>
+        <div class="obj">Abrir a conversa sobre autoridade percebida vs real.</div>
+        <div class="script"><b>Roteiro</b>"Especialista sabe. Autoridade é reconhecida. A diferença entre os dois se chama chancela. E chancela muda o preço que você cobra."</div>
+      </div>
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Prova</div>
+        <h5>Ticket antes e depois da pós</h5>
+        <div class="obj">Prova concreta do impacto financeiro da pós.</div>
+        <div class="script"><b>Roteiro</b>Antes: ticket médio limitado → Depois: ticket premium aceito → Antes: justificar preço → Depois: preço justifica posicionamento. Estrutura precifica.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · CTA</div>
+        <h5>Sua pós está te faltando?</h5>
+        <div class="obj">Provocar quem já tem volume mas ainda não tem chancela.</div>
+        <div class="script"><b>Roteiro</b>"Se você já vende, já entrega, já tem resultado — e o mercado ainda te trata como 'mais um' — a peça que falta pode ser uma pós. → Link na bio."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 7 -->
+  <div class="week reveal">
+    <div class="week-head">
+      <div class="week-num">07<small>Semana 07 · Mês 02</small></div>
+      <div class="week-theme">
+        <h3>Chancela: o selo que muda a narrativa</h3>
+        <p>Aprofundar o poder da chancela MEC como ativo de posicionamento.</p>
+      </div>
+      <div class="week-tag">Ato II · Valor</div>
+    </div>
+    <div class="posts">
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Informativo</div>
+        <h5>O que é chancela e por que ela vale ouro</h5>
+        <div class="obj">Desmistificar tecnicamente o que a chancela MEC entrega.</div>
+        <div class="script"><b>Roteiro</b>Chancela é reconhecimento institucional → Eleva credibilidade → Abre portas corporativas → Vira narrativa de venda → Diferencia amador de profissional → FEX é credenciada MEC.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · Engajamento</div>
+        <h5>Selo muda preço</h5>
+        <div class="obj">Frase de impacto que abre conversa sobre percepção.</div>
+        <div class="script"><b>Roteiro</b>"Mesmo produto. Mesmo conteúdo. Mesma pessoa. Um com chancela, outro sem. Preço aceito: três vezes maior. Selo muda preço. Sempre."</div>
+      </div>
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Prova</div>
+        <h5>Antes e depois de uma chancela</h5>
+        <div class="obj">Caso real de transformação pela chancela.</div>
+        <div class="script"><b>Roteiro</b>Antes: curso livre competindo com todos → Depois: pós com chancela em mercado próprio → Antes: justificativa constante → Depois: autoridade automática. A chancela escreve a narrativa por você.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · CTA</div>
+        <h5>Sua narrativa está completa?</h5>
+        <div class="obj">Convidar para diagnóstico de narrativa e posicionamento.</div>
+        <div class="script"><b>Roteiro</b>"Conteúdo sem chancela é esforço dobrado. Chancela é atalho de credibilidade. Quer saber como aplicar isso no seu produto? → Link na bio."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 8 -->
+  <div class="week reveal">
+    <div class="week-head">
+      <div class="week-num">08<small>Semana 08 · Mês 02</small></div>
+      <div class="week-theme">
+        <h3>Universidade Corporativa: escala B2B</h3>
+        <p>Abrir a conversa com decisores de RH, T&D e executivos de empresas médias e grandes.</p>
+      </div>
+      <div class="week-tag">Ato II · Valor</div>
+    </div>
+    <div class="posts">
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Informativo</div>
+        <h5>Universidade Corporativa não é plataforma</h5>
+        <div class="obj">Desambiguar conceito com decisores B2B.</div>
+        <div class="script"><b>Roteiro</b>Não é LMS → Não é catálogo de cursos → Não é evento → É sistema → É arquitetura → É decisão estratégica → Transforma treinamento em desenvolvimento → Transforma custo em ativo.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · Engajamento</div>
+        <h5>Treinamento sem indicador é custo</h5>
+        <div class="obj">Provocar decisores de RH que ainda tratam T&D como evento.</div>
+        <div class="script"><b>Roteiro</b>"Treinamento é evento. Desenvolvimento é sistema. Sem indicador, treinamento é custo. Com estrutura, vira ativo. Universidade Corporativa é essa virada."</div>
+      </div>
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Prova</div>
+        <h5>Case Vexilom: desenvolvimento como estratégia</h5>
+        <div class="obj">Social proof concreto com cliente real.</div>
+        <div class="script"><b>Roteiro</b>Contexto: empresa crescendo → Desafio: desenvolvimento interno desestruturado → Solução FEX: arquitetura de Universidade Corporativa → Resultado: cultura de aprendizagem que escala com o negócio. Desenvolvimento é estrutura.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · CTA</div>
+        <h5>Sua empresa tem desenvolvimento ou só treinamento?</h5>
+        <div class="obj">Direcionar decisores para reunião estratégica B2B.</div>
+        <div class="script"><b>Roteiro</b>"Se a sua empresa ainda trata desenvolvimento como agenda anual de treinamento, há um sistema mais robusto esperando por vocês. → Link na bio: reunião estratégica."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 9 -->
+  <div class="week reveal">
+    <div class="week-head">
+      <div class="week-num">09<small>Semana 09 · Mês 03</small></div>
+      <div class="week-theme">
+        <h3>Mentoria: transformação em negócio</h3>
+        <p>Apresentar a mentoria como ponte entre conhecimento individual e negócio estruturado.</p>
+      </div>
+      <div class="week-tag">Ato III · Conversão</div>
+    </div>
+    <div class="posts">
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Informativo</div>
+        <h5>Quando mentoria vira ativo</h5>
+        <div class="obj">Diferenciar mentoria genérica de mentoria estratégica FEX.</div>
+        <div class="script"><b>Roteiro</b>Mentoria comum: conselho → Mentoria estratégica: arquitetura → Mentoria FEX: estrutura + chancela + rede → O que muda: você sai com produto, não com anotações.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · Engajamento</div>
+        <h5>Conselho é barato. Estrutura é valiosa.</h5>
+        <div class="obj">Reframe que posiciona mentoria como ativo, não gasto.</div>
+        <div class="script"><b>Roteiro</b>"Conselho bom você acha de graça no Instagram. Estrutura que te faz crescer, não. Porque estrutura não é opinião — é arquitetura aplicada ao seu negócio."</div>
+      </div>
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Prova</div>
+        <h5>De especialista a dono de produto</h5>
+        <div class="obj">Jornada real de um mentorado FEX.</div>
+        <div class="script"><b>Roteiro</b>Ponto zero: especialista com autoridade dispersa → 30 dias: produto estruturado → 60 dias: posicionamento definido → 90 dias: primeiras turmas vendidas. Estrutura acelera o que antes parecia distante.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · CTA</div>
+        <h5>Você vai construir sozinho ou com estrutura?</h5>
+        <div class="obj">Provocação final que empurra para diagnóstico.</div>
+        <div class="script"><b>Roteiro</b>"Você pode levar cinco anos descobrindo sozinho o que uma mentoria entrega em noventa dias. A pergunta é: quanto tempo você ainda tem pra perder? → Link na bio."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 10 -->
+  <div class="week reveal">
+    <div class="week-head">
+      <div class="week-num">10<small>Semana 10 · Mês 03</small></div>
+      <div class="week-theme">
+        <h3>Lucro oculto: o dinheiro que não aparece</h3>
+        <p>Conteúdo estratégico-financeiro que revela margens invisíveis em produtos educacionais.</p>
+      </div>
+      <div class="week-tag">Ato III · Conversão</div>
+    </div>
+    <div class="posts">
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Informativo</div>
+        <h5>Lucro oculto: onde o dinheiro está escondido</h5>
+        <div class="obj">Abrir os olhos da audiência para margens que estão deixando na mesa.</div>
+        <div class="script"><b>Roteiro</b>Upsell estratégico → Esteira de produtos → Chancela como premium → Parcerias B2B → Comunidade como recorrência → Cada ponto desses é lucro que a maioria ignora.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · Engajamento</div>
+        <h5>Você está vendendo ou está deixando dinheiro na mesa?</h5>
+        <div class="obj">Frase-gatilho que gera autoanálise imediata.</div>
+        <div class="script"><b>Roteiro</b>"Todo produto educacional tem três camadas de lucro. A maioria só explora uma. As outras duas ficam invisíveis — e milhões escorrem por ali todo mês."</div>
+      </div>
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Prova</div>
+        <h5>Três camadas de receita que você pode ativar</h5>
+        <div class="obj">Mostrar estrutura financeira de um negócio educacional completo.</div>
+        <div class="script"><b>Roteiro</b>Camada 1: produto de entrada (volume) → Camada 2: produto premium (margem) → Camada 3: recorrência e B2B (escala) → Só quem tem ecossistema ativa as três.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · CTA</div>
+        <h5>Descubra o seu lucro oculto</h5>
+        <div class="obj">Chamada direta para diagnóstico financeiro.</div>
+        <div class="script"><b>Roteiro</b>"A gente faz um diagnóstico rápido do seu ecossistema e te mostra onde está o dinheiro que você ainda não viu. → Link na bio."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 11 -->
+  <div class="week reveal">
+    <div class="week-head">
+      <div class="week-num">11<small>Semana 11 · Mês 03</small></div>
+      <div class="week-theme">
+        <h3>Esteira: crescimento estruturado</h3>
+        <p>Apresentar o conceito de esteira — a arquitetura que transforma lançamento pontual em negócio perene.</p>
+      </div>
+      <div class="week-tag">Ato III · Conversão</div>
+    </div>
+    <div class="posts">
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Informativo</div>
+        <h5>Esteira educacional: o que é e por que muda tudo</h5>
+        <div class="obj">Explicar o modelo de negócio contínuo em produtos educacionais.</div>
+        <div class="script"><b>Roteiro</b>Lançamento é evento → Esteira é sistema → Lançamento pico e vale → Esteira crescimento contínuo → Sem esteira: dependência → Com esteira: previsibilidade.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · Engajamento</div>
+        <h5>Sem estrutura, não existe escala</h5>
+        <div class="obj">Ancorar um dos conceitos-chave da FEX.</div>
+        <div class="script"><b>Roteiro</b>"Sem estrutura, não existe escala. Tem gente faturando no grito faz três anos e ainda depende de lançamento pra pagar a folha. Esteira é o fim dessa fadiga."</div>
+      </div>
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Prova</div>
+        <h5>Anatomia de uma esteira que funciona</h5>
+        <div class="obj">Mostrar na prática os componentes de uma esteira FEX.</div>
+        <div class="script"><b>Roteiro</b>Entrada: extensão → Meio: pós ou programa continuado → Premium: mentoria ou consultoria → Recorrência: comunidade ou Universidade Corporativa → Tudo conectado, tudo se retroalimenta.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · CTA</div>
+        <h5>Você tem esteira ou tem lançamento?</h5>
+        <div class="obj">Diagnóstico imediato que revela o gap estrutural.</div>
+        <div class="script"><b>Roteiro</b>"Lançamento é emoção. Esteira é negócio. Se você ainda vive de lançamento, a gente te ajuda a virar a chave. → Link na bio."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEK 12 -->
+  <div class="week reveal">
+    <div class="week-head">
+      <div class="week-num">12<small>Semana 12 · Mês 03</small></div>
+      <div class="week-theme">
+        <h3>Fechamento e convite</h3>
+        <p>Resumir a jornada dos 90 dias e converter audiência aquecida em parceiros ativos.</p>
+      </div>
+      <div class="week-tag">Ato III · Conversão</div>
+    </div>
+    <div class="posts">
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Informativo</div>
+        <h5>Tudo que a FEX te mostrou em 90 dias</h5>
+        <div class="obj">Recapitular a jornada e consolidar a narrativa.</div>
+        <div class="script"><b>Roteiro</b>Mês 1: clareza → Mês 2: valor → Mês 3: conversão → Extensão, pós, chancela, Universidade Corporativa, mentoria, esteira. Tudo conecta. Tudo escala. Agora é a sua vez.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · Engajamento</div>
+        <h5>O óbvio nunca é óbvio</h5>
+        <div class="obj">Frase-assinatura Zora Viana que consolida identidade.</div>
+        <div class="script"><b>Roteiro</b>"O óbvio nunca é óbvio. Por isso estrutura transforma. Por isso a FEX existe. E por isso você chegou até aqui."</div>
+      </div>
+      <div class="post carrossel">
+        <div class="type"><span class="ic"></span>Carrossel</div>
+        <div class="pilar">Pilar · Prova</div>
+        <h5>O que acontece quando você entra no ecossistema</h5>
+        <div class="obj">Fotografia da transformação completa FEX.</div>
+        <div class="script"><b>Roteiro</b>Dia 1: diagnóstico → Semana 2: plano estratégico → Mês 1: estruturação → Mês 3: produto no ar → Mês 6: recorrência. Não é promessa. É processo.</div>
+      </div>
+      <div class="post reel">
+        <div class="type"><span class="ic"></span>Reel</div>
+        <div class="pilar">Pilar · CTA</div>
+        <h5>Próximo capítulo: o seu</h5>
+        <div class="obj">CTA final, direto e emocional — com senso de convite.</div>
+        <div class="script"><b>Roteiro</b>"Durante 90 dias você viu o que a FEX faz. Agora a pergunta é simples: você vai ver de fora ou vai construir de dentro? → Diagnóstico gratuito no link da bio."</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 08 · FEATURED EXAMPLES ===== -->
+<section id="examples">
+  <div class="sec-head reveal">
+    <div class="idx"><b>08</b><span>Exemplos de Execução</span><span class="line"></span></div>
+    <h2 class="h2">Três peças-chave<br>em detalhe cinematográfico.</h2>
+  </div>
+  <div class="feat-grid">
+    <div class="feat reveal">
+      <div class="label"><span style="width:8px;height:8px;border:1.5px solid var(--accent);border-radius:2px"></span>Carrossel · Abertura</div>
+      <h4>O que é a FEX Educação de verdade</h4>
+      <p class="intro">Peça de abertura que quebra a percepção reducionista e instala, em oito slides, a ideia central do ecossistema.</p>
+      <div class="slides">
+        <div class="slide-item"><div class="n">01</div><div class="txt">Você realmente entende o que a FEX faz?</div></div>
+        <div class="slide-item"><div class="n">02</div><div class="txt">A maioria acha que é só uma faculdade.</div></div>
+        <div class="slide-item"><div class="n">03</div><div class="txt">Na prática, é uma estrutura de crescimento.</div></div>
+        <div class="slide-item"><div class="n">04</div><div class="txt">Transformamos conhecimento em produto.</div></div>
+        <div class="slide-item"><div class="n">05</div><div class="txt">Produto em posicionamento.</div></div>
+        <div class="slide-item"><div class="n">06</div><div class="txt">Posicionamento em resultado.</div></div>
+        <div class="slide-item"><div class="n">07</div><div class="txt">A FEX não é sobre estudar.</div></div>
+        <div class="slide-item" style="border-color:var(--accent);background:rgba(50,205,50,.08)"><div class="n" style="background:var(--accent);color:#042004;border-color:var(--accent)">08</div><div class="txt" style="color:var(--accent);font-weight:500">É sobre crescer com estrutura.</div></div>
+      </div>
+    </div>
+    <div class="feat reel-feat reveal">
+      <div class="label"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)"></span>Reel · Engajamento</div>
+      <h4>Saber não é suficiente</h4>
+      <p class="intro">Reel de 18 segundos. Abertura seca, provocação central, virada conceitual. Formato que viraliza pelo corte preciso.</p>
+      <div class="big">Saber não é suficiente. Ensinar também não é. O que transforma conhecimento em negócio é <b style="color:var(--accent);font-weight:600">estrutura</b> — e é isso que a maioria pula.</div>
+    </div>
+    <div class="feat reveal">
+      <div class="label"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)"></span>Reel · CTA Elite</div>
+      <h4>Próximo capítulo: o seu</h4>
+      <p class="intro">O CTA de fechamento do trimestre. Formato contemplativo, tom decisório, corte limpo. Não vende. Convida.</p>
+      <div class="slides">
+        <div class="slide-item"><div class="n">00</div><div class="txt"><b style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em">HOOK · 0s</b><br>Durante 90 dias você viu o que a FEX faz.</div></div>
+        <div class="slide-item"><div class="n">01</div><div class="txt"><b style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em">PIVOT · 6s</b><br>Agora a pergunta é simples:</div></div>
+        <div class="slide-item" style="border-color:var(--accent);background:rgba(50,205,50,.08)"><div class="n" style="background:var(--accent);color:#042004;border-color:var(--accent)">02</div><div class="txt"><b style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em">PUNCH · 12s</b><br>Você vai ver de fora ou vai construir de dentro?</div></div>
+        <div class="slide-item"><div class="n">03</div><div class="txt"><b style="color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em">CTA · 16s</b><br>Diagnóstico gratuito no link da bio.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 09 · VISUAL DIRECTION ===== -->
+<section id="visual">
+  <div class="sec-head reveal">
+    <div class="idx"><b>09</b><span>Direção Visual</span><span class="line"></span></div>
+    <h2 class="h2">Green Tech.<br>Glass. Cinemático.</h2>
+    <p class="lede" style="margin-top:20px">Uma linguagem visual consistente que separa a FEX de qualquer coisa que já existe no nicho. Estética que sustenta a tese.</p>
+  </div>
+  <div class="vdir">
+    <div class="vdir-left reveal">
+      <div class="eyebrow">Identidade visual</div>
+      <h3 class="h3" style="margin:8px 0 16px">Uma paleta. Três camadas. Zero ruído.</h3>
+      <p style="font-size:14px;color:var(--ink-dim);line-height:1.65">Fundo escuro profundo, acentos em verde tech #32CD32 aplicados com precisão cirúrgica, glass com blur real e tipografia Syne para comandar hierarquia.</p>
+      <div class="vdir-chips">
+        <span class="chip">Fundo escuro profundo</span>
+        <span class="chip">Glow verde controlado</span>
+        <span class="chip">Glassmorphism real</span>
+        <span class="chip">Tipografia Syne</span>
+        <span class="chip">Animação suave</span>
+        <span class="chip">Grid arejado</span>
+        <span class="chip">Hierarquia forte</span>
+      </div>
+      <div class="palette">
+        <div class="swatch s-1"><div class="n">Accent</div><div class="v">#32CD32</div></div>
+        <div class="swatch s-2"><div class="n">Deep</div><div class="v">#050806</div></div>
+        <div class="swatch s-3"><div class="n">Glass</div><div class="v">#12221a</div></div>
+        <div class="swatch s-4"><div class="n">Ink</div><div class="v">#EAF4EA</div></div>
+      </div>
+    </div>
+    <div class="vdir-right">
+      <div class="vd-item reveal">
+        <div class="sq"></div>
+        <div>
+          <h5>Fundo escuro com profundidade</h5>
+          <p>Base #050806 com radial gradients suaves em verde. Nunca preto puro, nunca plano.</p>
+        </div>
+      </div>
+      <div class="vd-item reveal">
+        <div class="sq" style="background:linear-gradient(135deg,rgba(50,205,50,.3),rgba(50,205,50,.05))"></div>
+        <div>
+          <h5>Glow como acento, não decoração</h5>
+          <p>Luz verde aplicada apenas em pontos focais — números, CTAs, headlines. Nunca em excesso.</p>
+        </div>
+      </div>
+      <div class="vd-item reveal">
+        <div class="sq" style="backdrop-filter:blur(10px);background:rgba(255,255,255,.04);border:1px solid rgba(50,205,50,.3)"></div>
+        <div>
+          <h5>Glass com camadas</h5>
+          <p>Blur real em cards flutuantes, com bordas finas em verde translúcido. Sensação de profundidade.</p>
+        </div>
+      </div>
+      <div class="vd-item reveal">
+        <div class="sq" style="background:repeating-linear-gradient(0deg,transparent,transparent 10px,rgba(50,205,50,.15) 10px,rgba(50,205,50,.15) 11px)"></div>
+        <div>
+          <h5>Grid sutil e tecnológico</h5>
+          <p>Malha quase invisível ao fundo que dá estrutura visual sem competir com o conteúdo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 10 · CREATIVE IDEAS ===== -->
+<section id="ideas">
+  <div class="sec-head reveal">
+    <div class="idx"><b>10</b><span>Ideias Criativas Complementares</span><span class="line"></span></div>
+    <h2 class="h2">Quadros fixos<br>que constroem marca.</h2>
+    <p class="lede" style="margin-top:20px">Elementos recorrentes que criam ritmo no feed, ancoram identidade e viram assinatura.</p>
+  </div>
+  <div class="ideas">
+    <div class="idea reveal">
+      <div class="hash">#01</div>
+      <div>
+        <h5>FEX em 60 segundos</h5>
+        <p>Reel semanal fixo. Um conceito denso, explicado em um minuto. Sempre Zora. Sempre direto. Vira referência.</p>
+      </div>
+    </div>
+    <div class="idea reveal">
+      <div class="hash">#02</div>
+      <div>
+        <h5>O Óbvio Nunca É Óbvio</h5>
+        <p>Quadro visual de frases-assinatura Zora Viana. Tipografia imensa, fundo dark, glow verde. Feed vira identidade.</p>
+      </div>
+    </div>
+    <div class="idea reveal">
+      <div class="hash">#03</div>
+      <div>
+        <h5>Bastidor FEX</h5>
+        <p>Stories e reels curtos do dia-a-dia da operação. Humaniza marca institucional sem perder profissionalismo.</p>
+      </div>
+    </div>
+    <div class="idea reveal">
+      <div class="hash">#04</div>
+      <div>
+        <h5>Antes vs Depois</h5>
+        <p>Carrossel fixo quinzenal com jornadas de parceiros. Prova social que sustenta tese sem precisar explicar.</p>
+      </div>
+    </div>
+    <div class="idea reveal">
+      <div class="hash">#05</div>
+      <div>
+        <h5>Diagnóstico Flash</h5>
+        <p>Reel em formato de autoavaliação. Três perguntas rápidas, CTA direto. Gera lead aquecido em volume.</p>
+      </div>
+    </div>
+    <div class="idea reveal">
+      <div class="hash">#06</div>
+      <div>
+        <h5>Dicionário FEX</h5>
+        <p>Carrosséis que destrincham termos: chancela, esteira, universidade corporativa. Simplicidade como autoridade.</p>
+      </div>
+    </div>
+    <div class="idea reveal">
+      <div class="hash">#07</div>
+      <div>
+        <h5>Microcases de 15s</h5>
+        <p>Reel relâmpago com transformação de parceiro em três cortes. Alta retenção, alta prova.</p>
+      </div>
+    </div>
+    <div class="idea reveal">
+      <div class="hash">#08</div>
+      <div>
+        <h5>Zora Responde</h5>
+        <p>Quadro de respostas às dúvidas mais enviadas no direct. Prova de escuta ativa e autoridade pessoal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 11 · CLOSE ===== -->
+<section id="close">
+  <div class="sec-head reveal">
+    <div class="idx"><b>11</b><span>Convite à Execução</span><span class="line"></span></div>
+  </div>
+  <div class="cta reveal">
+    <div class="eyebrow" style="justify-content:center;display:flex">Próximo capítulo</div>
+    <h2>
+      Conteúdo informa.<br>
+      <em>Estrutura transforma.</em>
+    </h2>
+    <p>Esta estratégia não é um plano de postagens — é um sistema de crescimento. Noventa dias sequenciados com intenção cirúrgica, pensados para transformar audiência em parceiros, parceiros em receita e receita em ecossistema.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#cover">Iniciar execução →</a>
+      <a class="btn btn-ghost" href="#weeks">Revisar semanas</a>
+    </div>
+  </div>
+  <div class="footer">
+    FEX EDUCAÇÃO · <span>PLANEJAMENTO ESTRATÉGICO 2026</span> · 48 PEÇAS / 12 SEMANAS / 1 SISTEMA
+  </div>
+</section>
+
+<script>
+  // Particles
+  (function(){
+    const wrap = document.getElementById('particles');
+    const count = 24;
+    for(let i=0;i<count;i++){
+      const s = document.createElement('span');
+      s.style.left = Math.random()*100 + 'vw';
+      s.style.animationDelay = (Math.random()*18) + 's';
+      s.style.animationDuration = (14 + Math.random()*10) + 's';
+      s.style.opacity = (0.2 + Math.random()*0.4);
+      s.style.transform = 'scale(' + (0.5 + Math.random()*1.2) + ')';
+      wrap.appendChild(s);
+    }
+  })();
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.08, rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Nav active state
+  const navLinks = document.querySelectorAll('.nav a');
+  const sections = document.querySelectorAll('section');
+  const spy = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const id = e.target.id;
+        navLinks.forEach(l=>l.classList.toggle('active', l.getAttribute('href') === '#'+id));
+      }
+    });
+  },{threshold:.4});
+  sections.forEach(s=>spy.observe(s));
+
+  // Smooth scroll
+  navLinks.forEach(a=>a.addEventListener('click', (ev)=>{
+    ev.preventDefault();
+    const id = a.getAttribute('href');
+    document.querySelector(id).scrollIntoView({behavior:'smooth', block:'start'});
+  }));
+</script>
+</body>
+</html>
